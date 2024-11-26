@@ -1,39 +1,116 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { Stack } from "expo-router";
+import { useEffect, useState } from "react";
+import { Image, View } from "react-native";
+import * as Font from 'expo-font';
+import { Colors } from "@/constants/Colors";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    async function loadFonts() {
+        await Font.loadAsync({
+            'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf'),
+            'Poppins-SemiBold': require('../assets/fonts/Poppins-SemiBold.ttf'),
+            'Poppins-Regular': require('../assets/fonts/Poppins-Regular.ttf'),
+            'Poppins-Light': require('../assets/fonts/Poppins-Light.ttf'),
+            'Poppins-Medium': require('../assets/fonts/Poppins-Medium.ttf')
+        });
+        setFontsLoaded(true);
     }
-  }, [loaded]);
+    loadFonts();
+}, []);
 
-  if (!loaded) {
-    return null;
+
+
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Image source={require('../assets/images/logoIcon.png')}/>
+      </View>
+    );
   }
 
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    <Stack>
+      <Stack.Screen name='index' options={{headerShown: false}} />
+      <Stack.Screen name='SignInScreen' options={{
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: Colors.Primary,
+        },
+        headerTitle: () => (
+          <Image source={require('../assets/images/headerLogoBlack.png')}
+          style={{marginLeft: -18}}
+          />
+        )
+      }}
+      />
+
+<Stack.Screen name='PhoneVerificationScreen' options={{
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: Colors.Primary,
+        },
+        headerTitle: () => (
+          <Image source={require('../assets/images/headerLogoBlack.png')}
+          style={{marginLeft: -18}}
+          />
+        )
+      }}
+      />
+
+<Stack.Screen name='PasswordScreen' options={{
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: Colors.Primary,
+        },
+        headerTitle: () => (
+          <Image source={require('../assets/images/headerLogoBlack.png')}
+          style={{marginLeft: -18}}
+          />
+        )
+      }}
+      />
+
+<Stack.Screen name='ForgotPasswordScreen' options={{
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: Colors.Primary,
+        },
+        headerTitle: () => (
+          <Image source={require('../assets/images/headerLogoBlack.png')}
+          style={{marginLeft: -18}}
+          />
+        )
+      }}
+      />
+
+<Stack.Screen name='ResetPassword' options={{
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: Colors.Primary,
+        },
+        headerTitle: () => (
+          <Image source={require('../assets/images/headerLogoBlack.png')}
+          style={{marginLeft: -18}}
+          />
+        )
+      }}
+      />
+
+<Stack.Screen name='SignUpScreen' options={{
+        headerShadowVisible: false,
+        headerStyle: {
+          
+        },
+        headerTitle: ''
+      }}
+      />
+
+<Stack.Screen name='(authenticated)/(tabs)' options={{ headerShown: false }} />
+    </Stack>
+  ) 
 }
